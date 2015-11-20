@@ -1,5 +1,5 @@
 #
-# Title:     run_preprocessing.R
+# Title:     run_analysis.R
 #
 # Author:    Gilbert Maerina
 #
@@ -83,7 +83,7 @@ results<-results[order(Subject,Activity),]
 setwd("../")
 
 # write results
-write.table(results,file=paste("results-",format(tstamp,"%Y%m%d_%H%M%S"),".txt",sep=""),row.name=FALSE)
+write.table(results,file=paste("tidy_set_result-",format(tstamp,"%Y%m%d_%H%M%S"),".txt",sep=""),row.name=FALSE)
 
 # announce completion
 print("done")
