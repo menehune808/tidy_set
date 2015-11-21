@@ -42,7 +42,7 @@ The following files are available for the train and test data. Their description
 - Features are normalized and bounded within [-1,1].
 - Each feature vector is a row on the text file.
 
-###TRANSFORMATION
+###OUTPUT REQUIREMENTS
 
 1. Merges the training and the test sets to create one data set.
 2. Extracts only the measurements on the mean and standard deviation for each measurement. 
@@ -52,23 +52,28 @@ The following files are available for the train and test data. Their description
 
 ###IMPLEMENTATION:
 
-A timestamp is captured for when the script is run. 
+A timestamp is captured as an attribute for this analysis. 
 ```
   tstamp = Sys.time()
 ```
-This will indicate when the dataset was last downloaded and when it was last ran.
+This will indicate when the dataset was last downloaded and also for when it was last analyzed.
 
 The script checks to see if the dataset already exists, and if not, it will download and timstamp the 
 data for future reference. The script will unzip the data locally in the current working
 directory and will set the working directory as the newly unzipped directory.
 ```
+  if (!file.exists("UCI HAR Dataset")) 
+  {
+    fileUrl<- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+    destfile = paste("./UCI_HAR_DATA-", format(tstamp,"%Y%m%d_%H%M%S"), ".zip",sep="")
+    download.file(fileUrl, destfile=destfile,method="curl")
+    unzip(destfile)
+  } 
   destfile = paste("./UCI_HAR_DATA-", format(tstamp,"%Y%m%d_%H%M%S"), ".zip",sep="")
-
   write("",file=paste("last_run_",format(tstamp,"%Y%m%d_%H%M%S"),sep=""))
-
   setwd("./UCI HAR Dataset/")
 ```
-Individual datasets of interest are brought into objects for manipulation and
+Individual datasets of interest are brought in as objects for manipulation and
 aggregation later.
 ```
   x.test          <- read.table("./test/X_test.txt")
@@ -81,27 +86,28 @@ aggregation later.
   train.subject   <- read.table("./train/subject_train.txt")
 ```
 
-In accordance with providing column data identification, mesaurement data is fused with 
-label data. A secondary benefit of this step will be the ability to support column filtering 
-later in the process. Labeling the data prior to fusing will ensure that all data attributes 
-will be paired with their respective datasets through the processes.
+To provide sufficient identificatin of column data, mesaurement data is fused with 
+labeling data. Column identification also benefits in decreasing ambiguity in 
+the process of column filtering that occurs later in the process. Labeling the data 
+prior to fusing will help to ensure that all data attributes will be paired with their 
+respective datasets through the processes.
 ```
   colnames(x.test) <- data.labels[,2]
   colnames(x.train)<- data.labels[,2]
   colnames(test.subject) <- c("Subject")
   colnames(train.subject) <- c("Subject")
-``
+```
 For a couple of datasets, explicit declaration of column labels is required from the
-lack of labeling due to data transformation.
+transformation process they undergo.
 ```
   y.train <- data.frame(activity.labels[y.train[,1],2])
   y.test  <- data.frame(activity.labels[y.test[,1],2])
   colnames(y.train)<- c("Activity")
   colnames(y.test) <- c("Activity")
 ```
-Data is then filtered and fused based off the requirements provided. Proper order of processing
+The data is then filtered and fused based off the requirements provided. Proper procedure of processing
 is required to ensure that data attributes are maintained. Though the labeling was accomplished
-in an earlier step, proper grouping of datasets is followed to ensure data identification compliance.
+in an earlier step, datasets are explicitly grouped to ensure data identification integrity.
 ```  
   x.test  <- x.test[grep("std|mean",data.labels[,2],ignore.case=TRUE)]
   x.train <- x.train[grep("std|mean",data.labels[,2],ignore.case=TRUE)]
