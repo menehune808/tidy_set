@@ -38,11 +38,7 @@ if (!file.exists("UCI HAR Dataset")) {
   destfile = paste("./UCI_HAR_DATA-", format(tstamp,"%Y%m%d_%H%M%S"), ".zip",sep="")
   download.file(fileUrl, destfile=destfile,method="curl")
   unzip(destfile)
-  # record timestamp
-  #write("",file=paste("./UCI HAR Dataset/downloaded_",format(tstamp,"%Y%m%d_%H%M%S"),sep=""))
 } # end if()
-
-#write("",file=paste("last_run_",format(tstamp,"%Y%m%d_%H%M%S"),sep=""))
 
 setwd("./UCI HAR Dataset/")
 
