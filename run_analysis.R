@@ -37,12 +37,19 @@ if (!file.exists("UCI HAR Dataset")) {
   fileUrl<- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
   destfile = paste("./UCI_HAR_DATA-", format(tstamp,"%Y%m%d_%H%M%S"), ".zip",sep="")
   download.file(fileUrl, destfile=destfile,method="curl")
+  
+  message("unzipping file ", destfile)
   unzip(destfile)
+  
+  
+  # record timestamp
+  write("",file=paste("./UCI HAR Dataset/downloaded_",format(tstamp,"%Y%m%d_%H%M%S"),sep=""))
+  
 } # end if()
 
 setwd("./UCI HAR Dataset/")
 
-
+message("setting up temp datasets")
 # setup data sets
 x.test          <- read.table("./test/X_test.txt")
 x.train         <- read.table("./train/X_train.txt")
@@ -53,18 +60,21 @@ data.labels     <- read.table("./features.txt", stringsAsFactors = FALSE)
 test.subject    <- read.table("./test/subject_test.txt")
 train.subject   <- read.table("./train/subject_train.txt")
 
+message("setting up colnames")
 # setup colnames
 colnames(x.test) <- data.labels[,2]
 colnames(x.train)<- data.labels[,2]
 colnames(test.subject) <- c("Subject")
 colnames(train.subject) <- c("Subject")
 
+message("mapping descriptions")
 # map descriptions
 y.train <- data.frame(activity.labels[y.train[,1],2])
 y.test  <- data.frame(activity.labels[y.test[,1],2])
 colnames(y.train)<- c("Activity")
 colnames(y.test) <- c("Activity")
 
+message("merging datasets")
 # merge datasets
 x.test  <- x.test[grep("std|mean",data.labels[,2],ignore.case=TRUE)]
 x.train <- x.train[grep("std|mean",data.labels[,2],ignore.case=TRUE)]
@@ -75,14 +85,17 @@ xmerge_table<-data.table(x.merge)
 results<-xmerge_table[,lapply(.SD,mean),by=c("Subject","Activity"), .SDcols=1:(length(names(x.merge))-2)]
 results<-results[order(Subject,Activity),]
 
+
 # move up one level
 setwd("../")
 
+
+message("writing tidy set:",paste("tidy_set_result-",format(tstamp,"%Y%m%d_%H%M%S"),".txt",sep=""))
 # write results
 write.table(results,file=paste("tidy_set_result-",format(tstamp,"%Y%m%d_%H%M%S"),".txt",sep=""),row.name=FALSE)
 
 # announce completion
-print("done")
+message("analysis done")
 
 # end run_analysis()
 
