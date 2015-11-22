@@ -32,11 +32,11 @@ library('data.table')
 # timestamp of this processing
 tstamp = Sys.time()
 
-zip_file     <- "no file downloaded"
+zip_file     <- "no file downloaded\n"
 data_file    <- "UCI HAR Dataset: "
-output_file  <- "< none created >"
-summary_stmt <- "summary of merged:"
-spacer_line  <- "-------------------------------"
+output_file  <- "< none created >\n"
+summary_stmt <- "summary of merged:\n"
+spacer_line  <- "-------------------------------\n"
 merge_summary <- ""
 
 if (!file.exists("UCI HAR Dataset")) {
@@ -44,7 +44,7 @@ if (!file.exists("UCI HAR Dataset")) {
   fileUrl<- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
   destfile = paste("./UCI_HAR_DATA-", format(tstamp,"%Y%m%d_%H%M%S"), ".zip",sep="")
   download.file(fileUrl, destfile=destfile,method="curl")
-  zip_file <- paste("zip file:",destfile,sep="")
+  zip_file <- paste("zip file:",destfile,"\n",sep="")
   message("unzipping file ", destfile)
   unzip(destfile)
   
@@ -53,7 +53,7 @@ if (!file.exists("UCI HAR Dataset")) {
   write("",file=paste("./UCI HAR Dataset/downloaded_",format(tstamp,"%Y%m%d_%H%M%S"),sep=""))
 } 
 
-data_file <- paste(data_file, " : ", system("stat 'UCI HAR Dataset'", intern = TRUE)[8],sep="")
+data_file <- paste(data_file, " : ", system("stat 'UCI HAR Dataset'", intern = TRUE)[8],"\n",sep="")
 
 
 setwd("./UCI HAR Dataset/")
@@ -107,7 +107,7 @@ setwd("../")
 message("writing tidy set:",paste("tidy_set_result-",format(tstamp,"%Y%m%d_%H%M%S"),".txt",sep=""))
 # write results
 write.table(results,file=paste("tidy_set_result-",format(tstamp,"%Y%m%d_%H%M%S"),".txt",sep=""),row.name=FALSE)
-output_file <- paste("result: ","tidy_set_result-",format(tstamp,"%Y%m%d_%H%M%S"),".txt",sep="")
+output_file <- paste("result: ","tidy_set_result-",format(tstamp,"%Y%m%d_%H%M%S"),".txt","\n",sep="")
 
 # announce completion
 message("analysis done")

@@ -128,11 +128,14 @@ descriptive name + hyphen + timestamp + file type.
 
 ###ANALYSIS HISTORY
 ---------------------------------------------------------
+zip file:./UCI_HAR_DATA-20151122_013453.zip
 
-zip file:./UCI_HAR_DATA-20151122_010736.zip
-UCI HAR Dataset:  :  Birth: 2015-11-22 01:08:04.255626500 -1000
-result: tidy_set_result-20151122_010736.txt
+UCI HAR Dataset:  :  Birth: 2015-11-22 01:35:21.131979700 -1000
+
+result: tidy_set_result-20151122_013453.txt
+
 summary of merged:
+
 Min.   :-1.0000  
 1st Qu.: 0.2626  
 Median : 0.2772  
@@ -662,3 +665,4 @@ Mean   :16.15
 3rd Qu.:24.00  
 Max.   :30.00  
 -------------------------------
+
