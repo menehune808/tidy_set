@@ -10,7 +10,7 @@ Current directory hosts these files/folders:
 - CodeBook.md     (file will be updated with details about analysis)
 - UCI HAR Dataset (If analysis had already run prior)
 
-####PROCEDURE
+####PROCEDURE:
 "run_analysis.R" can be run without prior downloading of the dataset. It will check if the UCI HAR Dataset 
 exists, and if not, will download a copy of the dataset and unzip locally to the computer. The analysis will
 only occur if two conditions of the data files are met:
@@ -22,7 +22,7 @@ then manual unzipping will need to be done for analysis to occur.
 To run the analysis, type:
  >source("./run_analysis.R")
 
-####OBSERVATIONS/CONCLUSION
+####OBSERVATIONS/CONCLUSION:
 Progress will be displayed in the console. Tidy set will be written to local directory when analysis 
 is completed. CodeBook.md will be updated(if exists in current directory) with the name of zipped file (if download was required), birthdate
 of data directory, output filename, and summary of resulting merged dataset.
