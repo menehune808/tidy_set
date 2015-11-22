@@ -32,20 +32,29 @@ library('data.table')
 # timestamp of this processing
 tstamp = Sys.time()
 
+zip_file     <- "no file downloaded"
+data_file    <- "UCI HAR Dataset: "
+output_file  <- "< none created >"
+summary_stmt <- "summary of merged:"
+spacer_line  <- "-------------------------------"
+merge_summary <- ""
+
 if (!file.exists("UCI HAR Dataset")) {
   # download the data
   fileUrl<- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
   destfile = paste("./UCI_HAR_DATA-", format(tstamp,"%Y%m%d_%H%M%S"), ".zip",sep="")
   download.file(fileUrl, destfile=destfile,method="curl")
-  
+  zip_file <- paste("zip file:",destfile,sep="")
   message("unzipping file ", destfile)
   unzip(destfile)
   
   
   # record timestamp
   write("",file=paste("./UCI HAR Dataset/downloaded_",format(tstamp,"%Y%m%d_%H%M%S"),sep=""))
-  
-} # end if()
+} 
+
+data_file <- paste(data_file, " : ", system("stat 'UCI HAR Dataset'", intern = TRUE)[8],sep="")
+
 
 setwd("./UCI HAR Dataset/")
 
@@ -81,10 +90,15 @@ x.train <- x.train[grep("std|mean",data.labels[,2],ignore.case=TRUE)]
 x.test  <- cbind(x.test,y.test,test.subject)
 x.train <- cbind(x.train, y.train,train.subject)
 x.merge <- merge( x.test, x.train,all=TRUE)
+
+
+#for appending to codebook
+merge_summary <- summary(x.merge)
+
+
 xmerge_table<-data.table(x.merge)
 results<-xmerge_table[,lapply(.SD,mean),by=c("Subject","Activity"), .SDcols=1:(length(names(x.merge))-2)]
 results<-results[order(Subject,Activity),]
-
 
 # move up one level
 setwd("../")
@@ -93,9 +107,18 @@ setwd("../")
 message("writing tidy set:",paste("tidy_set_result-",format(tstamp,"%Y%m%d_%H%M%S"),".txt",sep=""))
 # write results
 write.table(results,file=paste("tidy_set_result-",format(tstamp,"%Y%m%d_%H%M%S"),".txt",sep=""),row.name=FALSE)
+output_file <- paste("result: ","tidy_set_result-",format(tstamp,"%Y%m%d_%H%M%S"),".txt",sep="")
 
 # announce completion
 message("analysis done")
+
+
+
+if(file.exists("./CodeBook.md"))
+{
+  message("updating CodeBook.md")
+  write(c(zip_file,data_file,output_file,summary_stmt,merge_summary,spacer_line),file="CodeBook.md",append=TRUE)
+}
 
 # end run_analysis()
 
