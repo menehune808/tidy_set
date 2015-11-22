@@ -1,12 +1,9 @@
-# tidy_set
-
-##Getting and Cleaning Data Course Project
-
-
 ###README
 ####Assumptions:
-R installed and running on host computer
-"data.table" package installed
+R installed and running on host computer.
+
+"data.table" package installed.
+
 Current directory hosts these files/folders:
 - run_analysis.R  (R script)          
 - README.md       (this file)
